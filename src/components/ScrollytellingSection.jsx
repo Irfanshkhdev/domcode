@@ -181,11 +181,32 @@ function ContactQuickBox() {
   const [name, setName] = React.useState('');
   const [phone, setPhone] = React.useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!msg.trim()) return;
 
-    // Save message to localStorage so Admin Inbox receives it instantly!
+    // 1. Send quick inquiry to Irfan Shaikh via Web3Forms API
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: "8eb59931-f151-4382-a5df-5dea3328fbf5",
+          subject: `⚡ Quick Consultation Request from ${name.trim() || "Website Visitor"}`,
+          from_name: "DomCode Quick Contact",
+          name: name.trim() || "Website Visitor",
+          phone: phone.trim() || "Not provided",
+          message: msg.trim()
+        })
+      });
+    } catch (err) {
+      console.error("Web3Forms submission notice:", err);
+    }
+
+    // 2. Save message to localStorage so Admin Inbox receives it instantly!
     const newMsg = {
       id: `msg-${Date.now()}`,
       name: name.trim() || "Website Visitor",

@@ -22,17 +22,43 @@ export default function ContactSection() {
     projectType: 'Custom Web Application',
     message: ''
   });
+  const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.name || !formData.email) return;
 
-    // Save message to localStorage for Admin Inbox
+    setSubmitting(true);
+
+    // 1. Send form details directly to Irfan Shaikh via Web3Forms API
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json"
+        },
+        body: JSON.stringify({
+          access_key: "8eb59931-f151-4382-a5df-5dea3328fbf5",
+          subject: `⚡ New Project Inquiry from ${formData.name.trim()}`,
+          from_name: "DomCode Web App",
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim() || "Not provided",
+          solution_needed: formData.projectType,
+          message: formData.message.trim() || "Requested software project consultation."
+        })
+      });
+    } catch (err) {
+      console.error("Web3Forms submission notice:", err);
+    }
+
+    // 2. Save message to localStorage for Admin Inbox
     const newMsg = {
       id: `msg-${Date.now()}`,
       name: formData.name.trim(),
@@ -63,6 +89,7 @@ export default function ContactSection() {
       // fallback
     }
 
+    setSubmitting(false);
     setSubmitted(true);
     setTimeout(() => {
       setSubmitted(false);
@@ -185,7 +212,7 @@ export default function ContactSection() {
 
                 {/* Instagram */}
                 <a
-                  href="https://instagram.com"
+                  href="https://instagram.com/wardom.store"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-3.5 rounded-xl bg-pink-500/10 border border-pink-500/20 hover:bg-pink-500 hover:text-white text-pink-400 transition-all group"
@@ -194,7 +221,7 @@ export default function ContactSection() {
                     <InstagramIcon className="w-5 h-5" />
                     <div>
                       <div className="text-[10px] font-mono uppercase">Instagram</div>
-                      <div className="text-xs font-mono font-semibold">@domcode</div>
+                      <div className="text-xs font-mono font-semibold">@wardom.store</div>
                     </div>
                   </div>
                   <span className="text-xs font-mono font-bold group-hover:translate-x-1 transition-transform">Follow →</span>
