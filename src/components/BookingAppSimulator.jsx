@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, CheckCircle2, User, ChevronRight, Sparkles } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, User, ChevronRight, Menu, Sparkles, Scissors } from 'lucide-react';
 
 export default function BookingAppSimulator() {
-  const [selectedService, setSelectedService] = useState("Custom App Sprint");
+  const [selectedService, setSelectedService] = useState("Premium Haircut & Fade");
   const [selectedTime, setSelectedTime] = useState("02:30 PM");
   const [isBooked, setIsBooked] = useState(false);
 
   const services = [
-    { title: "Custom App Sprint", duration: "45 mins", desc: "Architecture & Blueprint" },
-    { title: "Tech Stack Audit", duration: "30 mins", desc: "Performance Optimization" },
-    { title: "Local Business Automation", duration: "60 mins", desc: "Booking & Workflow Integration" },
+    { title: "Premium Haircut & Fade", duration: "45 mins", price: "$45", desc: "Precision Cut & Styling" },
+    { title: "Deep Tissue Massage", duration: "60 mins", price: "$85", desc: "Therapeutic Relaxation" },
+    { title: "Executive Grooming Package", duration: "90 mins", price: "$130", desc: "Full Treatment & Shave" },
   ];
 
   const timeSlots = ["10:00 AM", "11:30 AM", "02:30 PM", "04:00 PM", "05:30 PM"];
@@ -23,85 +23,117 @@ export default function BookingAppSimulator() {
   };
 
   return (
-    <div className="w-full glass-card rounded-2xl p-5 md:p-6 border border-white/10 shadow-2xl relative overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-4">
-        <div className="flex items-center space-x-2">
-          <Calendar className="w-4 h-4 text-zinc-400" />
-          <span className="text-xs font-mono tracking-wider text-zinc-300 uppercase">Automated Booking Engine</span>
+    <div className="relative mx-auto w-[300px] h-[600px] bg-black border-[8px] border-zinc-900 rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col justify-between text-white font-sans">
+      
+      {/* iPhone Dynamic Island Notch */}
+      <div className="absolute top-0 inset-x-0 h-6 bg-zinc-900 w-32 mx-auto rounded-b-xl z-20" />
+
+      {/* App Mobile Glass Header */}
+      <div className="pt-7 px-4 pb-3 bg-zinc-950/90 backdrop-blur-md border-b border-white/10 z-10 flex items-center justify-between">
+        <button className="p-1 text-zinc-400 hover:text-white transition-colors">
+          <Menu className="w-4 h-4" />
+        </button>
+
+        <div className="flex flex-col items-center">
+          <span className="text-xs font-bold font-mono tracking-wide text-white">Luxe Salon & Spa</span>
+          <span className="text-[9px] font-mono text-emerald-400">● Live Booking App</span>
         </div>
-        <span className="text-[10px] font-mono text-zinc-400 bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
-          Syncs with Google / Outlook
-        </span>
+
+        <button className="p-1.5 rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors">
+          <User className="w-3.5 h-3.5" />
+        </button>
       </div>
 
-      {/* Service Selection */}
-      <div className="space-y-2 mb-4">
-        <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block">1. Select Service</label>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-          {services.map((srv) => (
-            <button
-              key={srv.title}
-              onClick={() => setSelectedService(srv.title)}
-              className={`p-2.5 rounded-xl text-left border transition-all ${
-                selectedService === srv.title
-                  ? "bg-white text-black border-white shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-                  : "bg-white/[0.03] text-zinc-300 border-white/5 hover:border-white/20"
-              }`}
-            >
-              <div className="text-xs font-semibold">{srv.title}</div>
-              <div className={`text-[10px] font-mono mt-0.5 ${selectedService === srv.title ? "text-zinc-700" : "text-zinc-500"}`}>
-                {srv.duration}
-              </div>
-            </button>
-          ))}
+      {/* Screen Content Body */}
+      <div className="flex-1 px-4 py-3 overflow-y-auto space-y-4 scrollbar-none">
+        
+        {/* Banner */}
+        <div className="p-3 rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-950 border border-white/10 flex items-center justify-between">
+          <div>
+            <div className="text-[10px] font-mono text-zinc-400 uppercase">Automated Booking</div>
+            <div className="text-xs font-bold text-white">Select Spa Service</div>
+          </div>
+          <Scissors className="w-4 h-4 text-emerald-400" />
         </div>
+
+        {/* Service Selection */}
+        <div className="space-y-2">
+          <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block">1. Service</label>
+          <div className="space-y-1.5">
+            {services.map((srv) => (
+              <button
+                key={srv.title}
+                onClick={() => setSelectedService(srv.title)}
+                className={`w-full p-2.5 rounded-xl text-left border transition-all flex items-center justify-between ${
+                  selectedService === srv.title
+                    ? "bg-white text-black border-white shadow-md font-semibold"
+                    : "bg-white/[0.04] text-zinc-300 border-white/10 hover:border-white/20"
+                }`}
+              >
+                <div>
+                  <div className="text-xs">{srv.title}</div>
+                  <div className={`text-[9px] font-mono ${selectedService === srv.title ? "text-zinc-600" : "text-zinc-500"}`}>
+                    {srv.duration} • {srv.desc}
+                  </div>
+                </div>
+                <div className={`text-xs font-mono font-bold ${selectedService === srv.title ? "text-black" : "text-emerald-400"}`}>
+                  {srv.price}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Time Slot Selector */}
+        <div>
+          <label className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider block mb-1.5">2. Available Today</label>
+          <div className="flex space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+            {timeSlots.map((slot) => (
+              <button
+                key={slot}
+                onClick={() => setSelectedTime(slot)}
+                className={`px-2.5 py-1.5 rounded-lg text-[10px] font-mono border transition-all whitespace-nowrap ${
+                  selectedTime === slot
+                    ? "bg-emerald-500 text-black border-emerald-400 font-bold"
+                    : "bg-white/5 text-zinc-400 border-white/5 hover:text-white"
+                }`}
+              >
+                {slot}
+              </button>
+            ))}
+          </div>
+        </div>
+
       </div>
 
-      {/* Time Slot Selector */}
-      <div className="mb-4">
-        <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-2">2. Available Slots Today</label>
-        <div className="flex space-x-2 overflow-x-auto pb-1 scrollbar-none">
-          {timeSlots.map((slot) => (
-            <button
-              key={slot}
-              onClick={() => setSelectedTime(slot)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono border transition-all whitespace-nowrap ${
-                selectedTime === slot
-                  ? "bg-zinc-200 text-black border-white font-semibold"
-                  : "bg-white/5 text-zinc-400 border-white/5 hover:text-white"
-              }`}
-            >
-              {slot}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Confirmation & CTA */}
-      <div className="pt-3 border-t border-white/10 flex items-center justify-between">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-mono text-zinc-500 uppercase">Selected Appointment</span>
-          <span className="text-xs font-mono text-white font-medium">{selectedService} • {selectedTime}</span>
+      {/* Bottom Action Bar */}
+      <div className="p-3 bg-zinc-950 border-t border-white/10 z-10">
+        <div className="flex items-center justify-between mb-2 px-1">
+          <span className="text-[10px] font-mono text-zinc-400 truncate max-w-[170px]">
+            {selectedService}
+          </span>
+          <span className="text-[10px] font-mono text-emerald-400 font-bold">{selectedTime}</span>
         </div>
 
         <button
           onClick={handleBook}
-          className="px-4 py-2 rounded-xl bg-white text-black hover:bg-zinc-200 font-mono text-xs font-semibold flex items-center space-x-2 shadow-[0_0_15px_rgba(255,255,255,0.25)] transition-all cursor-pointer"
+          className="w-full py-2.5 rounded-xl bg-white text-black hover:bg-zinc-200 font-mono text-xs font-bold flex items-center justify-center space-x-2 transition-all cursor-pointer active:scale-95 shadow-[0_0_15px_rgba(255,255,255,0.2)]"
         >
           {isBooked ? (
             <>
               <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              <span>Confirmed!</span>
+              <span>Appointment Booked!</span>
             </>
           ) : (
             <>
-              <span>Instant Book</span>
-              <ChevronRight className="w-3.5 h-3.5" />
+              <Calendar className="w-3.5 h-3.5" />
+              <span>Confirm Instant Booking</span>
+              <ChevronRight className="w-3.5 h-3.5 ml-1" />
             </>
           )}
         </button>
       </div>
+
     </div>
   );
 }
