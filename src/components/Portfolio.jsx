@@ -50,11 +50,20 @@ export default function Portfolio({ onBackToHome }) {
       try {
         const parsed = JSON.parse(savedProjects);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          setProjects(parsed);
+          // If saved projects contain old legacy projects, upgrade to new projects
+          const hasOldData = parsed.some(p => p.title === "Yana Nail Studio" || p.title === "The Girlfriend Hour");
+          if (hasOldData) {
+            setProjects(defaultProjects);
+            localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
+          } else {
+            setProjects(parsed);
+          }
         }
       } catch (err) {
         console.error("Failed to parse portfolio projects", err);
       }
+    } else {
+      localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
     }
   }, []);
 

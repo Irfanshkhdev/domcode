@@ -120,9 +120,17 @@ export default function Admin({ onBackToHome }) {
     const savedProjects = localStorage.getItem("domcode_portfolio_projects");
     if (savedProjects) {
       try {
-        setProjects(JSON.parse(savedProjects));
+        const parsed = JSON.parse(savedProjects);
+        const hasOldData = Array.isArray(parsed) && parsed.some(p => p.title === "Yana Nail Studio" || p.title === "The Girlfriend Hour");
+        if (hasOldData || !Array.isArray(parsed) || parsed.length === 0) {
+          setProjects(defaultProjects);
+          localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
+        } else {
+          setProjects(parsed);
+        }
       } catch (err) {
         setProjects(defaultProjects);
+        localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
       }
     } else {
       setProjects(defaultProjects);
