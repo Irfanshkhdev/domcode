@@ -50,19 +50,25 @@ export default function Portfolio({ onBackToHome }) {
       try {
         const parsed = JSON.parse(savedProjects);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          // If saved projects contain old legacy projects, upgrade to new projects
-          const hasOldData = parsed.some(p => p.title === "Yana Nail Studio" || p.title === "The Girlfriend Hour");
-          if (hasOldData) {
+          const hasVBFitness = parsed.some(p => p.title.toLowerCase().includes("vb fitness"));
+          const hasArfiya = parsed.some(p => p.title.toLowerCase().includes("arfiya"));
+          
+          if (!hasVBFitness || !hasArfiya) {
             setProjects(defaultProjects);
             localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
           } else {
             setProjects(parsed);
           }
+        } else {
+          setProjects(defaultProjects);
+          localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
         }
       } catch (err) {
-        console.error("Failed to parse portfolio projects", err);
+        setProjects(defaultProjects);
+        localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
       }
     } else {
+      setProjects(defaultProjects);
       localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
     }
   }, []);

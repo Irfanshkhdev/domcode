@@ -121,8 +121,10 @@ export default function Admin({ onBackToHome }) {
     if (savedProjects) {
       try {
         const parsed = JSON.parse(savedProjects);
-        const hasOldData = Array.isArray(parsed) && parsed.some(p => p.title === "Yana Nail Studio" || p.title === "The Girlfriend Hour");
-        if (hasOldData || !Array.isArray(parsed) || parsed.length === 0) {
+        const hasVBFitness = Array.isArray(parsed) && parsed.some(p => p.title.toLowerCase().includes("vb fitness"));
+        const hasArfiya = Array.isArray(parsed) && parsed.some(p => p.title.toLowerCase().includes("arfiya"));
+        
+        if (!hasVBFitness || !hasArfiya || !Array.isArray(parsed) || parsed.length === 0) {
           setProjects(defaultProjects);
           localStorage.setItem("domcode_portfolio_projects", JSON.stringify(defaultProjects));
         } else {
