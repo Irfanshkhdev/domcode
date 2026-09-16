@@ -18,10 +18,14 @@ export default function App() {
   const getViewFromURL = () => {
     const hash = window.location.hash.toLowerCase();
     const path = window.location.pathname.toLowerCase();
+    
+    // Explicit valid routes
     if (hash === "#admin" || path === "/admin" || path.endsWith("/admin")) return "admin";
     if (hash === "#portfolio" || path === "/portfolio" || path.endsWith("/portfolio")) return "portfolio";
-    if (hash === "#404" || path === "/404" || path.endsWith("/404")) return "404";
-    return "home";
+    if (hash === "" || hash === "#" || hash === "#hero" || hash === "#solutions" || hash === "#contact" || path === "/" || path === "") return "home";
+    
+    // Wildcard catch-all for any non-existent route -> 404 Error page
+    return "404";
   };
 
   const [currentView, setCurrentView] = useState(getViewFromURL);

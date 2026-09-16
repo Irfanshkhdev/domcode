@@ -1,8 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MessageCircle, Trash2, ShieldCheck, Plus, ExternalLink, Image, CheckCircle2, Clock, Sparkles, FolderPlus } from 'lucide-react';
+import { Mail, Phone, MessageCircle, Trash2, ShieldCheck, Plus, ExternalLink, Image, CheckCircle2, Clock, Sparkles, FolderPlus, Lock, LogOut, KeyRound, UserCheck, AlertCircle } from 'lucide-react';
+
+// Dynamic Daily Password Generator
+// Formula: irfan@grind{day}{date} (e.g. irfan@grindwednesday16)
+const getDailyPassword = () => {
+  const today = new Date();
+  const dayName = today.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
+  const dateNum = today.getDate();
+  return `irfan@grind${dayName}${dateNum}`;
+};
+
+const AUTHORIZED_EMAIL = "irfanshaikh3262@gmail.com";
 
 export default function Admin({ onBackToHome }) {
+  // Authentication State
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return sessionStorage.getItem("domcode_admin_auth") === "true";
+  });
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [loginError, setLoginError] = useState('');
+
+  // Admin Dashboard State
   const [activeTab, setActiveTab] = useState("inbox"); // "inbox" | "portfolio"
   const [messages, setMessages] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -110,6 +130,29 @@ export default function Admin({ onBackToHome }) {
     }
   }, []);
 
+  // Handle Login Submission
+  const handleLoginSubmit = (e) => {
+    e.preventDefault();
+    setLoginError('');
+
+    const expectedPassword = getDailyPassword();
+    const formattedEmail = loginEmail.trim().toLowerCase();
+
+    if (formattedEmail === AUTHORIZED_EMAIL && loginPassword.trim() === expectedPassword) {
+      setIsAuthenticated(true);
+      sessionStorage.setItem("domcode_admin_auth", "true");
+    } else {
+      setLoginError("Invalid credentials. Please verify your authorized email and today's dynamic security password.");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsAuthenticated(false);
+    sessionStorage.removeItem("domcode_admin_auth");
+    setLoginEmail('');
+    setLoginPassword('');
+  };
+
   const handleDeleteMessage = (id) => {
     const updated = messages.filter(m => m.id !== id);
     setMessages(updated);
@@ -158,49 +201,162 @@ export default function Admin({ onBackToHome }) {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-black text-white pt-20 sm:pt-24 pb-20 px-4 sm:px-6 lg:px-8 relative">
-      {/* Background Grid Pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto relative z-10 space-y-8">
-        
-        {/* Top Navigation & Status Bar */}
-        <div className="glass-card p-6 rounded-3xl border border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <button
-              onClick={onBackToHome}
-              className="text-xs font-mono text-zinc-400 hover:text-white uppercase tracking-wider mb-1.5 flex items-center space-x-1 transition-colors cursor-pointer"
-            >
-              <span>← Back to DomCode Website</span>
-            </button>
-            <div className="flex items-center space-x-3">
-              <h1 className="text-2xl sm:text-3xl font-extrabold font-mono text-white">DomCode Admin Portal</h1>
-              <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 font-semibold">
-                🔒 Irfan Shaikh Desk
-              </span>
+  // ================= 1. SECURE LOGIN SCREEN (IF NOT AUTHENTICATED) =================
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4 font-sans text-slate-100">
+        <div className="max-w-md w-full bg-white text-slate-900 rounded-2xl shadow-2xl p-8 border border-slate-200 relative overflow-hidden">
+          
+          {/* Top Security Banner */}
+          <div className="flex items-center space-x-3 border-b border-slate-100 pb-5 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-slate-900">DomCode Developer Console</h1>
+              <p className="text-xs text-slate-500 font-mono">Restricted Access • Irfan Shaikh Desk</p>
             </div>
           </div>
 
-          {/* Admin Navigation Tabs */}
-          <div className="flex space-x-2 bg-white/5 p-1.5 rounded-2xl border border-white/10 w-fit">
+          {loginError && (
+            <div className="mb-5 p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-start space-x-2 font-medium">
+              <AlertCircle className="w-4 h-4 text-red-600 flex-shrink-0 mt-0.5" />
+              <span>{loginError}</span>
+            </div>
+          )}
+
+          {/* Login Form */}
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1 font-mono">
+                Authorized Email Address
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  required
+                  value={loginEmail}
+                  onChange={(e) => setLoginEmail(e.target.value)}
+                  placeholder="irfanshaikh3262@gmail.com"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-sans"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1 font-mono flex justify-between">
+                <span>Daily Security Password</span>
+                <span className="text-[10px] text-indigo-600 font-normal">Dynamic Daily Auth</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="password"
+                  required
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  placeholder="••••••••••••••••"
+                  className="w-full bg-slate-50 border border-slate-300 rounded-xl px-4 py-3 text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent font-sans"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold text-xs tracking-wider uppercase font-mono hover:bg-indigo-700 transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer active:scale-95"
+            >
+              <KeyRound className="w-4 h-4" />
+              <span>Authenticate & Enter Console</span>
+            </button>
+          </form>
+
+          {/* Return to Public Website */}
+          <div className="mt-6 pt-4 border-t border-slate-100 text-center">
+            <button
+              onClick={onBackToHome}
+              className="text-xs text-slate-500 hover:text-slate-900 font-mono transition-colors"
+            >
+              ← Return to DomCode Public Site
+            </button>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
+
+  // ================= 2. TRADITIONAL LIGHT SAAS DASHBOARD (AUTHENTICATED) =================
+  return (
+    <div className="min-h-screen bg-slate-100 text-slate-800 font-sans selection:bg-indigo-600 selection:text-white pt-20 pb-16">
+      
+      {/* Top Traditional SaaS Header Bar */}
+      <header className="bg-white border-b border-slate-200 shadow-sm fixed top-0 left-0 right-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-sm">
+              DC
+            </div>
+            <div>
+              <div className="text-sm font-bold text-slate-900 font-mono tracking-tight">DomCode Console</div>
+              <div className="text-[10px] text-slate-500 font-mono">Developer Dashboard • Irfan Shaikh</div>
+            </div>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={onBackToHome}
+              className="text-xs font-mono text-slate-600 hover:text-slate-900 transition-colors hidden sm:block"
+            >
+              ← Public Site
+            </button>
+
+            <button
+              onClick={handleLogout}
+              className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-700 text-xs font-mono border border-slate-200 transition-all flex items-center space-x-1.5 cursor-pointer"
+              title="End session"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Logout</span>
+            </button>
+          </div>
+
+        </div>
+      </header>
+
+      {/* Main SaaS Dashboard Body */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 space-y-6">
+        
+        {/* Navigation Bar & Summary Stats */}
+        <div className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div className="flex items-center space-x-2">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <h1 className="text-xl font-bold text-slate-900 font-mono">Console Overview</h1>
+            </div>
+            <p className="text-xs text-slate-500 mt-0.5 font-light">
+              Manage live client inquiries and maintain your portfolio case studies.
+            </p>
+          </div>
+
+          {/* Crisp Traditional Tabs */}
+          <div className="flex space-x-2 bg-slate-100 p-1 rounded-lg border border-slate-200 w-fit">
             <button
               onClick={() => setActiveTab("inbox")}
-              className={`px-5 py-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === "inbox"
-                  ? "bg-white text-black font-bold shadow-md"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-indigo-600 text-white font-bold shadow-sm"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200"
               }`}
             >
-              Developer Inbox ({messages.length})
+              Client Inbox ({messages.length})
             </button>
 
             <button
               onClick={() => setActiveTab("portfolio")}
-              className={`px-5 py-2.5 rounded-xl text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-4 py-2 rounded-md text-xs font-mono uppercase tracking-wider transition-all cursor-pointer ${
                 activeTab === "portfolio"
-                  ? "bg-white text-black font-bold shadow-md"
-                  : "text-zinc-400 hover:text-white"
+                  ? "bg-indigo-600 text-white font-bold shadow-sm"
+                  : "text-slate-600 hover:text-slate-900 hover:bg-slate-200"
               }`}
             >
               Portfolio Manager ({projects.length})
@@ -208,16 +364,14 @@ export default function Admin({ onBackToHome }) {
           </div>
         </div>
 
-        {/* ================= INBOX TAB ================= */}
+        {/* ================= 1. CLIENT INBOX TAB ================= */}
         {activeTab === "inbox" && (
-          <div className="space-y-6">
+          <div className="space-y-4">
+            
             <div className="flex items-center justify-between">
-              <div>
-                <h2 className="text-xl font-bold font-mono text-white">Client Inbox & Direct Inquiries</h2>
-                <p className="text-xs text-zinc-400 font-light">
-                  Real-time list of all messages submitted through the website quick forms.
-                </p>
-              </div>
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-mono">
+                Recent Client Messages ({messages.length})
+              </h2>
 
               {messages.length > 0 && (
                 <button
@@ -227,48 +381,44 @@ export default function Admin({ onBackToHome }) {
                       localStorage.setItem("domcode_messages", JSON.stringify([]));
                     }
                   }}
-                  className="px-3 py-1.5 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 text-xs font-mono hover:bg-red-500 hover:text-white transition-all cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-red-50 text-red-600 border border-red-200 text-xs font-mono hover:bg-red-100 transition-all cursor-pointer"
                 >
-                  Clear Inbox
+                  Clear All
                 </button>
               )}
             </div>
 
             {messages.length === 0 ? (
-              <div className="glass-card rounded-3xl p-12 text-center border border-white/10">
-                <Mail className="w-10 h-10 text-zinc-500 mx-auto mb-3" />
-                <h3 className="text-base font-bold text-white font-mono">No New Messages</h3>
-                <p className="text-xs text-zinc-400 font-light">Messages sent by client visitors will land here instantly.</p>
+              <div className="bg-white rounded-xl p-12 text-center border border-slate-200 shadow-sm space-y-2">
+                <Mail className="w-8 h-8 text-slate-400 mx-auto" />
+                <h3 className="text-sm font-bold text-slate-800 font-mono">Inbox is Empty</h3>
+                <p className="text-xs text-slate-500 font-light">Form submissions from site visitors will land here instantly.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 gap-4">
                 {messages.map((msg) => (
-                  <motion.div
-                    key={msg.id}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="card-emerald rounded-2xl p-6 space-y-4 relative"
-                  >
-                    {/* Header Info */}
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-white/10 pb-4">
+                  <div key={msg.id} className="bg-white rounded-xl p-5 border border-slate-200 shadow-sm space-y-3">
+                    
+                    {/* Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-100 pb-3">
                       <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-mono font-bold text-base">
+                        <div className="w-9 h-9 rounded-full bg-indigo-50 border border-indigo-200 text-indigo-700 flex items-center justify-center font-mono font-bold text-xs">
                           {msg.name ? msg.name.charAt(0).toUpperCase() : 'C'}
                         </div>
                         <div>
-                          <div className="text-base font-bold text-white">{msg.name || "Anonymous Client"}</div>
-                          <div className="text-xs font-mono text-emerald-400 font-semibold">{msg.projectType || "Consultation Request"}</div>
+                          <div className="text-sm font-bold text-slate-900">{msg.name || "Anonymous Client"}</div>
+                          <div className="text-xs font-mono text-indigo-600 font-semibold">{msg.projectType || "Consultation Request"}</div>
                         </div>
                       </div>
 
-                      <div className="flex items-center space-x-3">
-                        <span className="text-xs font-mono text-zinc-400 flex items-center space-x-1">
-                          <Clock className="w-3.5 h-3.5" />
+                      <div className="flex items-center space-x-3 text-xs text-slate-500 font-mono">
+                        <span className="flex items-center space-x-1">
+                          <Clock className="w-3.5 h-3.5 text-slate-400" />
                           <span>{msg.date || "Recent"}</span>
                         </span>
                         <button
                           onClick={() => handleDeleteMessage(msg.id)}
-                          className="p-2 rounded-xl text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
+                          className="p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors"
                           title="Delete message"
                         >
                           <Trash2 className="w-4 h-4" />
@@ -276,24 +426,24 @@ export default function Admin({ onBackToHome }) {
                       </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="bg-black/70 rounded-xl p-4 border border-white/10 text-xs text-zinc-200 font-sans leading-relaxed">
+                    {/* Message Body */}
+                    <div className="bg-slate-50 rounded-lg p-3.5 border border-slate-200 text-xs text-slate-700 leading-relaxed font-sans">
                       "{msg.message}"
                     </div>
 
-                    {/* Contact Channels & One-Click Triggers */}
-                    <div className="flex flex-wrap items-center justify-between gap-4 pt-1">
-                      <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-zinc-300">
+                    {/* Action Triggers */}
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-1">
+                      <div className="flex flex-wrap items-center gap-4 text-xs font-mono text-slate-600">
                         {msg.email && (
                           <div className="flex items-center space-x-1.5">
-                            <Mail className="w-4 h-4 text-sky-400" />
-                            <span className="text-white font-medium">{msg.email}</span>
+                            <Mail className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-slate-800 font-medium">{msg.email}</span>
                           </div>
                         )}
                         {msg.phone && (
                           <div className="flex items-center space-x-1.5">
-                            <Phone className="w-4 h-4 text-emerald-400" />
-                            <span className="text-white font-medium">{msg.phone}</span>
+                            <Phone className="w-3.5 h-3.5 text-slate-400" />
+                            <span className="text-slate-800 font-medium">{msg.phone}</span>
                           </div>
                         )}
                       </div>
@@ -304,9 +454,9 @@ export default function Admin({ onBackToHome }) {
                             href={`https://wa.me/${msg.phone.replace(/[^0-9]/g, '')}?text=Hi%20${encodeURIComponent(msg.name)},%20I'm%20Irfan%20Shaikh%20from%20DomCode.%20Received%20your%20message!`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="px-4 py-2 rounded-xl bg-emerald-500 text-black text-xs font-mono font-bold flex items-center space-x-1.5 hover:bg-emerald-400 transition-all shadow-[0_0_15px_rgba(16,185,129,0.3)]"
+                            className="px-3.5 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-mono font-semibold flex items-center space-x-1.5 hover:bg-emerald-700 transition-all shadow-sm"
                           >
-                            <MessageCircle className="w-4 h-4" />
+                            <MessageCircle className="w-3.5 h-3.5" />
                             <span>WhatsApp Reply</span>
                           </a>
                         )}
@@ -314,100 +464,91 @@ export default function Admin({ onBackToHome }) {
                         {msg.email && (
                           <a
                             href={`mailto:${msg.email}?subject=DomCode%20Consultation%20Reply`}
-                            className="px-4 py-2 rounded-xl bg-white text-black text-xs font-mono font-bold flex items-center space-x-1.5 hover:bg-zinc-200 transition-all"
+                            className="px-3.5 py-1.5 rounded-lg bg-sky-600 text-white text-xs font-mono font-semibold flex items-center space-x-1.5 hover:bg-sky-700 transition-all shadow-sm"
                           >
-                            <Mail className="w-4 h-4" />
+                            <Mail className="w-3.5 h-3.5" />
                             <span>Email Client</span>
                           </a>
                         )}
                       </div>
                     </div>
-                  </motion.div>
+
+                  </div>
                 ))}
               </div>
             )}
+
           </div>
         )}
 
-        {/* ================= PORTFOLIO MANAGER TAB ================= */}
+        {/* ================= 2. PORTFOLIO MANAGER TAB ================= */}
         {activeTab === "portfolio" && (
-          <div className="space-y-8">
+          <div className="space-y-6">
             
-            {/* Add New Project Card Form */}
-            <div className="glass-card rounded-3xl p-6 sm:p-8 border border-white/15 space-y-6">
-              <div className="flex items-center space-x-3 border-b border-white/10 pb-4">
-                <FolderPlus className="w-6 h-6 text-emerald-400" />
-                <div>
-                  <h2 className="text-lg font-bold font-mono text-white">Add New Portfolio Project</h2>
-                  <p className="text-xs text-zinc-400 font-light">Upload a project to feature live on the /portfolio case studies grid.</p>
-                </div>
+            {/* Add Project Form Card */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm space-y-4">
+              <div className="flex items-center space-x-3 border-b border-slate-100 pb-3">
+                <FolderPlus className="w-5 h-5 text-indigo-600" />
+                <h3 className="text-sm font-bold text-slate-900 font-mono uppercase tracking-wider">Publish New Portfolio Case Study</h3>
               </div>
 
               {showAddSuccess && (
-                <div className="p-4 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-mono flex items-center space-x-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Project successfully published to portfolio!</span>
+                <div className="p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-mono flex items-center space-x-2">
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Project successfully added to portfolio!</span>
                 </div>
               )}
 
-              <form onSubmit={handleAddProject} className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <form onSubmit={handleAddProject} className="space-y-3">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                      Project Title *
-                    </label>
+                    <label className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block mb-1">Project Title *</label>
                     <input
                       type="text"
                       required
                       value={newProject.title}
                       onChange={(e) => setNewProject({ ...newProject, title: e.target.value })}
                       placeholder="e.g. Apex Fitness App"
-                      className="w-full bg-black/80 border border-white/15 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-white font-sans"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                     />
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                      Subtitle / Category *
-                    </label>
+                    <label className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block mb-1">Subtitle / Category *</label>
                     <input
                       type="text"
                       required
                       value={newProject.subtitle}
                       onChange={(e) => setNewProject({ ...newProject, subtitle: e.target.value })}
                       placeholder="e.g. Custom Workout Booking Web App"
-                      className="w-full bg-black/80 border border-white/15 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-white font-sans"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                    Description *
-                  </label>
+                  <label className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block mb-1">Description *</label>
                   <textarea
                     rows={2}
                     value={newProject.description}
                     onChange={(e) => setNewProject({ ...newProject, description: e.target.value })}
                     placeholder="Brief 2-line summary of project goals and features..."
-                    className="w-full bg-black/80 border border-white/15 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-white font-sans resize-none"
+                    className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 resize-none"
                   />
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                      Image URL or Upload File
-                    </label>
+                    <label className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block mb-1">Image URL or File Upload</label>
                     <div className="flex space-x-2">
                       <input
                         type="text"
                         value={newProject.image}
                         onChange={(e) => setNewProject({ ...newProject, image: e.target.value })}
                         placeholder="/portfolio/yana.jpg or https://..."
-                        className="w-full bg-black/80 border border-white/15 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-white font-sans"
+                        className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                       />
-                      <label className="px-3 py-2 rounded-xl bg-white/10 hover:bg-white hover:text-black transition-all cursor-pointer flex items-center justify-center text-xs font-mono text-white whitespace-nowrap">
+                      <label className="px-3 py-2.5 rounded-lg bg-slate-200 text-slate-700 hover:bg-slate-300 transition-all cursor-pointer flex items-center justify-center text-xs font-mono whitespace-nowrap">
                         <Image className="w-4 h-4 mr-1" />
                         <span>File</span>
                         <input type="file" accept="image/*" onChange={handleImageFileUpload} className="hidden" />
@@ -416,55 +557,53 @@ export default function Admin({ onBackToHome }) {
                   </div>
 
                   <div>
-                    <label className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mb-1">
-                      Tags (comma separated)
-                    </label>
+                    <label className="text-[11px] font-mono text-slate-600 uppercase tracking-wider block mb-1">Tags (comma separated)</label>
                     <input
                       type="text"
                       value={newProject.tags}
                       onChange={(e) => setNewProject({ ...newProject, tags: e.target.value })}
                       placeholder="React, Next.js, Tailwind"
-                      className="w-full bg-black/80 border border-white/15 rounded-xl p-3 text-xs text-white focus:outline-none focus:border-white font-sans"
+                      className="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-xs text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-600"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="px-6 py-3.5 rounded-xl bg-white text-black font-semibold font-mono text-xs uppercase tracking-wider hover:bg-zinc-200 transition-all cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center space-x-2"
+                  className="px-5 py-2.5 rounded-lg bg-indigo-600 text-white font-semibold font-mono text-xs uppercase tracking-wider hover:bg-indigo-700 transition-all cursor-pointer shadow-sm flex items-center space-x-2"
                 >
                   <Plus className="w-4 h-4" />
-                  <span>Publish Project to Portfolio</span>
+                  <span>Publish Case Study</span>
                 </button>
               </form>
             </div>
 
-            {/* Active Projects List */}
-            <div className="space-y-4">
-              <h3 className="text-lg font-bold font-mono text-white">Active Case Studies ({projects.length})</h3>
+            {/* Active Case Studies List */}
+            <div className="space-y-3">
+              <h3 className="text-xs font-bold font-mono uppercase tracking-wider text-slate-900">Live Case Studies ({projects.length})</h3>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {projects.map((proj) => (
-                  <div key={proj.id} className="glass-card rounded-2xl p-4 border border-white/10 flex items-start space-x-4">
+                  <div key={proj.id} className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm flex items-start space-x-3">
                     <img
                       src={proj.image}
                       alt={proj.title}
-                      className="w-24 h-16 object-cover rounded-lg border border-white/10 bg-zinc-900"
+                      className="w-20 h-14 object-cover rounded-lg border border-slate-200 bg-slate-100 flex-shrink-0"
                     />
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
-                        <h4 className="text-sm font-bold text-white truncate font-mono">{proj.title}</h4>
+                        <h4 className="text-xs font-bold text-slate-900 truncate font-mono">{proj.title}</h4>
                         <button
                           onClick={() => handleDeleteProject(proj.id)}
-                          className="p-1 text-zinc-500 hover:text-red-400 transition-colors"
+                          className="p-1 text-slate-400 hover:text-red-600 transition-colors"
                           title="Remove project"
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
                       </div>
-                      <div className="text-[11px] font-mono text-emerald-400 truncate">{proj.subtitle}</div>
-                      <p className="text-[11px] text-zinc-400 font-light truncate mt-1">{proj.description}</p>
+                      <div className="text-[10px] font-mono text-indigo-600 truncate">{proj.subtitle}</div>
+                      <p className="text-[10px] text-slate-500 font-light truncate mt-0.5">{proj.description}</p>
                     </div>
                   </div>
                 ))}
@@ -474,7 +613,7 @@ export default function Admin({ onBackToHome }) {
           </div>
         )}
 
-      </div>
+      </main>
     </div>
   );
 }
