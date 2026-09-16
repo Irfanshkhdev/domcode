@@ -58,7 +58,7 @@ export default function ScrollytellingSection() {
 
   return (
     <section id="solutions" className="relative bg-transparent z-10">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-32 py-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16 sm:space-y-32 py-12 sm:py-24">
         {sections.map((sec) => (
           <motion.div
             key={sec.id}

@@ -4,7 +4,7 @@ import { ArrowDown, Cpu, MessageCircle, Sparkles } from 'lucide-react';
 
 export default function Hero({ onExploreClick, onViewPortfolio }) {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 sm:pt-24 pb-16 px-4 sm:px-6 lg:px-8 bg-transparent overflow-hidden">
+    <section id="hero" className="relative min-h-screen flex items-center justify-center pt-20 sm:pt-24 pb-8 sm:pb-16 px-4 sm:px-6 lg:px-8 bg-transparent overflow-hidden">
       {/* Background Grid Pattern & Ambient Radial Glow */}
       <div className="absolute inset-0 bg-grid-pattern opacity-10 pointer-events-none" />
       <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[550px] h-[550px] bg-white/[0.02] rounded-full blur-3xl pointer-events-none" />
