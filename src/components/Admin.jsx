@@ -66,38 +66,38 @@ export default function Admin({ onBackToHome }) {
   const defaultProjects = [
     {
       id: 1,
-      title: "Yana Nail Studio",
-      subtitle: "Bespoke Nail Salon Web App",
-      description: "Custom luxury salon web application with integrated online appointment scheduling, service showcase, and instant WhatsApp booking sync.",
-      image: "/portfolio/yana.jpg",
-      tags: ["React", "Tailwind CSS", "Booking Sync"],
+      title: "Arfiya's Nailventure",
+      subtitle: "Premium Nail Salon & Lookbook App",
+      description: "A bespoke, mobile-first web application engineered for luxury salon services. Features a dynamic, interactive nail art lookbook and a frictionless appointment scheduling engine that automates client bookings.",
+      image: "/portfolio/arfiya.png",
+      tags: ["Next.js", "Tailwind CSS", "Booking Engine"],
       link: "#"
     },
     {
       id: 2,
-      title: "The Girlfriend Hour",
-      subtitle: "Podcast & Media Platform",
-      description: "High-converting dark mode podcast streaming and media platform featuring custom audio player components, episode archives, and sponsor integration.",
-      image: "/portfolio/girlfriend.jpg",
-      tags: ["Next.js", "Media Engine", "Tailwind"],
+      title: "Dr. Meenakshi ENT Clinic",
+      subtitle: "Specialized Medical & Patient Triage Dashboard",
+      description: "A comprehensive healthcare management portal streamlining patient intake. Built with a highly secure, intuitive dashboard for managing upcoming appointments, clinical history, and showcasing specialized ENT procedures.",
+      image: "/portfolio/meenakshi.jpg",
+      tags: ["React", "Node.js", "Patient CRM"],
       link: "#"
     },
     {
       id: 3,
-      title: "Amber ENT",
-      subtitle: "Patient Intake & Triage Engine",
-      description: "Futuristic medical healthcare patient triage system automating appointment requests, intake forms, and emergency urgency scoring.",
-      image: "/portfolio/amber.jpg",
-      tags: ["Full Stack", "TypeScript", "Node.js"],
+      title: "VB Fitness",
+      subtitle: "Gym CRM & Membership Automation Platform",
+      description: "A high-performance digital ecosystem for a premier fitness center in Kondhwa Budruk. Features automated member onboarding, live class rosters for CrossFit and Zumba, and a complete administrative dashboard for trainers.",
+      image: "/portfolio/vb_fitness.jpg",
+      tags: ["Full Stack", "PostgreSQL", "Member Portal"],
       link: "#"
     },
     {
       id: 4,
-      title: "Rishu Portfolio",
-      subtitle: "High-Impact Digital Identity",
-      description: "Bespoke personal brand identity and interactive portfolio platform engineered with high-end scroll physics and kinetic typography.",
-      image: "/portfolio/rishu.jpg",
-      tags: ["Framer Motion", "React", "Kinetic Design"],
+      title: "Dona Cucina",
+      subtitle: "Digital Menu & Real-Time Kitchen Sync",
+      description: "An end-to-end restaurant automation system engineered for a high-volume cafe in Koregaon Park. Delivers instant QR-based table ordering, custom menu modifiers, and a live WebSocket-driven kitchen display system.",
+      image: "/portfolio/dona_cucina.jpg",
+      tags: ["WebSockets", "TypeScript", "Payment Gateway"],
       link: "#"
     }
   ];
