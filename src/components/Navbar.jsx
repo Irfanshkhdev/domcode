@@ -36,18 +36,18 @@ export default function Navbar({ onBackToHome, onViewPortfolio }) {
   return (
     <header className="fixed top-0 left-0 right-0 z-40 bg-black/85 backdrop-blur-xl border-b border-white/10 transition-all duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-24">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* Brand Logo Image -> Clicking takes user directly to HOMEPAGE */}
           <button
             onClick={() => handleNavClick("#hero")}
-            className="flex items-center group py-2 text-left cursor-pointer focus:outline-none"
+            className="flex items-center group py-1 text-left cursor-pointer focus:outline-none"
             title="Return to DomCode Homepage"
           >
             <img 
               src="/domcodelogo.png" 
               alt="DomCode Logo" 
-              className="h-14 sm:h-16 md:h-18 w-auto object-contain brightness-110 group-hover:scale-105 transition-all duration-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
+              className="h-9 sm:h-11 md:h-12 w-auto object-contain brightness-110 group-hover:scale-105 transition-all duration-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.15)]" 
             />
           </button>
 

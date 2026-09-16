@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import DomCodeLogo from './components/SegmentedLogo';
 import Portfolio from './components/Portfolio';
 import Admin from './components/Admin';
+import NotFound from './components/NotFound';
 
 export default function App() {
   const [preloaderFinished, setPreloaderFinished] = useState(false);
@@ -19,6 +20,7 @@ export default function App() {
     const path = window.location.pathname.toLowerCase();
     if (hash === "#admin" || path === "/admin" || path.endsWith("/admin")) return "admin";
     if (hash === "#portfolio" || path === "/portfolio" || path.endsWith("/portfolio")) return "portfolio";
+    if (hash === "#404" || path === "/404" || path.endsWith("/404")) return "404";
     return "home";
   };
 
@@ -106,29 +108,35 @@ export default function App() {
           {currentView === "admin" && (
             <Admin onBackToHome={() => { setCurrentView("home"); window.scrollTo({ top: 0 }); }} />
           )}
+
+          {currentView === "404" && (
+            <NotFound onBackToHome={() => { setCurrentView("home"); window.scrollTo({ top: 0 }); }} />
+          )}
         </main>
 
         <Footer onOpenAdmin={() => { setCurrentView("admin"); window.scrollTo({ top: 0 }); }} />
       </div>
 
       {/* PERSISTENT MOBILE FLOATING ACTION BUTTON (FAB: "✦ See My Work") */}
-      <div className="md:hidden fixed bottom-6 right-6 z-50">
-        <button
-          onClick={() => {
-            if (currentView === "portfolio") {
-              setCurrentView("home");
-              window.scrollTo({ top: 0 });
-            } else {
-              setCurrentView("portfolio");
-              window.scrollTo({ top: 0 });
-            }
-          }}
-          className="px-5 py-3.5 rounded-full bg-white text-black text-xs font-mono font-bold shadow-[0_0_25px_rgba(255,255,255,0.4)] flex items-center space-x-2 cursor-pointer active:scale-95 transition-all"
-        >
-          <Sparkles className="w-4 h-4 text-emerald-600" />
-          <span>{currentView === "portfolio" ? "← Home" : "✦ See My Work"}</span>
-        </button>
-      </div>
+      {preloaderFinished && (
+        <div className="md:hidden fixed bottom-6 right-6 z-50">
+          <button
+            onClick={() => {
+              if (currentView === "portfolio") {
+                setCurrentView("home");
+                window.scrollTo({ top: 0 });
+              } else {
+                setCurrentView("portfolio");
+                window.scrollTo({ top: 0 });
+              }
+            }}
+            className="px-5 py-3.5 rounded-full bg-white text-black text-xs font-mono font-bold shadow-[0_0_25px_rgba(255,255,255,0.4)] flex items-center space-x-2 cursor-pointer active:scale-95 transition-all"
+          >
+            <Sparkles className="w-4 h-4 text-emerald-600" />
+            <span>{currentView === "portfolio" ? "← Home" : "✦ See My Work"}</span>
+          </button>
+        </div>
+      )}
     </div>
   );
 }
