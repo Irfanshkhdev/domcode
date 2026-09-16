@@ -8,11 +8,11 @@ export default function MenuAppSimulator() {
   const [showOrderSuccess, setShowOrderSuccess] = useState(false);
 
   const menuItems = [
-    { id: 1, name: "Signature Espresso", category: "drinks", price: "$4.50", tag: "Popular" },
-    { id: 2, name: "Truffle Wagyu Burger", category: "mains", price: "$18.00", tag: "Chef Special" },
-    { id: 3, name: "Margherita Pizza", category: "mains", price: "$14.50", tag: "Woodfired" },
-    { id: 4, name: "Organic Matcha Latte", category: "drinks", price: "$5.50", tag: "Organic" },
-    { id: 5, name: "Dark Choco Fondant", category: "desserts", price: "$8.50", tag: "Decadent" },
+    { id: 1, name: "Signature Espresso", category: "drinks", price: "₹150", tag: "Popular" },
+    { id: 2, name: "Truffle Wagyu Burger", category: "mains", price: "₹450", tag: "Chef Special" },
+    { id: 3, name: "Margherita Pizza", category: "mains", price: "₹350", tag: "Woodfired" },
+    { id: 4, name: "Organic Matcha Latte", category: "drinks", price: "₹220", tag: "Organic" },
+    { id: 5, name: "Dark Choco Fondant", category: "desserts", price: "₹280", tag: "Decadent" },
   ];
 
   const addToCart = (item) => {
@@ -23,7 +23,7 @@ export default function MenuAppSimulator() {
     ? menuItems 
     : menuItems.filter(i => i.category === activeCategory);
 
-  const totalAmount = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('$', '')), 0).toFixed(2);
+  const totalAmount = cart.reduce((sum, item) => sum + parseFloat(item.price.replace('₹', '')), 0).toFixed(0);
 
   const handleSimulateOrder = () => {
     if (cart.length === 0) return;
@@ -110,7 +110,7 @@ export default function MenuAppSimulator() {
       <div className="p-3 bg-zinc-950 border-t border-white/10 z-10 space-y-2">
         <div className="flex items-center justify-between text-[11px] font-mono">
           <span className="text-zinc-400">Total Order:</span>
-          <span className="text-white font-bold">{cart.length} items (${totalAmount})</span>
+          <span className="text-white font-bold">{cart.length} items (₹{totalAmount})</span>
         </div>
 
         <button

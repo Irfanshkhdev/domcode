@@ -2,16 +2,6 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowDown, Cpu, MessageCircle, Sparkles } from 'lucide-react';
 
-function InstagramIcon({ className = "w-4 h-4" }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-      <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
-      <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
-    </svg>
-  );
-}
-
 export default function Hero({ onExploreClick, onViewPortfolio }) {
   return (
     <section id="hero" className="relative min-h-screen flex items-center justify-center pt-28 pb-16 px-4 sm:px-6 lg:px-8 bg-transparent overflow-hidden">
@@ -118,8 +108,42 @@ export default function Hero({ onExploreClick, onViewPortfolio }) {
 
         </div>
 
-        {/* Right Column: Empty spacer area reserved for single fixed background logo */}
-        <div className="hidden lg:block lg:col-span-5 h-[400px] pointer-events-none" />
+        {/* Right Column: Floating Business Value Badges in empty space */}
+        <div className="hidden lg:block lg:col-span-5 relative h-[420px]">
+          <div className="absolute right-6 top-1/2 -translate-y-1/2 z-20 space-y-10 pointer-events-auto">
+            
+            {/* Badge 1: 🚀 Lightning Fast */}
+            <motion.div
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0 }}
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-zinc-300 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:border-white/30 transition-colors cursor-default"
+            >
+              <span>🚀</span>
+              <span>Lightning Fast</span>
+            </motion.div>
+
+            {/* Badge 2: 🔒 Highly Secure (Staggered to left) */}
+            <motion.div
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
+              className="-translate-x-10 flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-zinc-300 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:border-white/30 transition-colors cursor-default"
+            >
+              <span>🔒</span>
+              <span>Highly Secure</span>
+            </motion.div>
+
+            {/* Badge 3: 📱 App-Like Experience */}
+            <motion.div
+              animate={{ y: [0, -15, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.7 }}
+              className="flex items-center space-x-2 px-4 py-2.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-xs font-mono text-zinc-300 shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:border-white/30 transition-colors cursor-default"
+            >
+              <span>📱</span>
+              <span>App-Like Experience</span>
+            </motion.div>
+
+          </div>
+        </div>
 
       </div>
     </section>

@@ -8,9 +8,9 @@ export default function BookingAppSimulator() {
   const [isBooked, setIsBooked] = useState(false);
 
   const services = [
-    { title: "Premium Haircut & Fade", duration: "45 mins", price: "$45", desc: "Precision Cut & Styling" },
-    { title: "Deep Tissue Massage", duration: "60 mins", price: "$85", desc: "Therapeutic Relaxation" },
-    { title: "Executive Grooming Package", duration: "90 mins", price: "$130", desc: "Full Treatment & Shave" },
+    { title: "Premium Haircut & Fade", duration: "45 mins", price: "₹499", desc: "Precision Cut & Styling" },
+    { title: "Deep Tissue Massage", duration: "60 mins", price: "₹999", desc: "Therapeutic Relaxation" },
+    { title: "Executive Grooming Package", duration: "90 mins", price: "₹1,499", desc: "Full Treatment & Shave" },
   ];
 
   const timeSlots = ["10:00 AM", "11:30 AM", "02:30 PM", "04:00 PM", "05:30 PM"];
