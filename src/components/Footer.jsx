@@ -17,10 +17,7 @@ export default function Footer({ onBackToHome }) {
         >
           <img src="/domcodelogo.png" alt="DomCode Logo" className="h-10 w-auto object-contain brightness-110" />
           <div>
-            <div className="text-white font-bold font-mono text-sm tracking-widest uppercase">
-              DOMCODE
-            </div>
-            <div className="text-xs font-mono text-zinc-500">
+            <div className="text-xs font-mono text-zinc-400 font-medium">
               Irfan Shaikh — Lead Developer (+91 7262950982)
             </div>
           </div>

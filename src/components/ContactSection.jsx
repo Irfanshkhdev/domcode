@@ -180,8 +180,7 @@ export default function ContactSection() {
               <div className="flex items-center space-x-4 pb-6 border-b border-white/10">
                 <img src="/domcodelogo.png" alt="DomCode Logo" className="h-10 w-auto object-contain brightness-110" />
                 <div>
-                  <h3 className="text-xl font-bold font-mono text-white tracking-widest">DOMCODE</h3>
-                  <p className="text-xs text-zinc-400 font-mono">Lead Developer: Irfan Shaikh</p>
+                  <p className="text-xs text-zinc-400 font-mono font-medium">Lead Developer: Irfan Shaikh</p>
                 </div>
               </div>
 
