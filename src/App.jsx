@@ -134,9 +134,9 @@ export default function App() {
                 window.scrollTo({ top: 0 });
               }
             }}
-            className="px-5 py-3.5 rounded-full bg-white text-black text-xs font-mono font-bold shadow-[0_0_25px_rgba(255,255,255,0.4)] flex items-center space-x-2 cursor-pointer active:scale-95 transition-all"
+            className="px-5 py-3.5 rounded-full bg-zinc-900/70 backdrop-blur-xl border border-white/25 text-white text-xs font-mono font-semibold shadow-[0_10px_30px_rgba(0,0,0,0.6),_inset_0_1px_1px_rgba(255,255,255,0.3)] flex items-center space-x-2 cursor-pointer active:scale-95 transition-all duration-300 hover:border-white/40"
           >
-            <Sparkles className="w-4 h-4 text-emerald-600" />
+            <Sparkles className="w-4 h-4 text-emerald-400" />
             <span>{currentView === "portfolio" ? "← Home" : "✦ See My Work"}</span>
           </button>
         </div>
